@@ -1,0 +1,2775 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#d946ef">
+    <title>Todo List cute 🌸</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&family=Fredoka+One:wght@400&family=Comfortaa:wght@300;400;500;600;700&display=swap');
+        
+        :root {
+            --primary-color: #d946ef;
+            --primary-light: #e879f9;
+            --primary-dark: #a21caf;
+            --secondary-color: #8b5cf6;
+            --bg-gradient-from: #f8fafc;
+            --bg-gradient-via: #f1f5f9;
+            --bg-gradient-to: #e2e8f0;
+            --shadow-color: rgba(139, 92, 246, 0.15);
+            --brightness: 1;
+            --cute-pink: #ec4899;
+            --cute-purple: #a855f7;
+            --cute-blue: #6366f1;
+            --cute-yellow: #eab308;
+            --cute-green: #22c55e;
+        }
+        
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            height: auto;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Comfortaa', 'Nunito', sans-serif;
+            filter: brightness(var(--brightness));
+            transition: filter 0.3s ease;
+            min-height: 100vh;
+            height: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        .cute-title {
+            font-family: 'Fredoka One', cursive;
+            text-shadow: 2px 2px 4px rgba(255, 182, 193, 0.5);
+        }
+        
+        .cute-text {
+            font-family: 'Comfortaa', sans-serif;
+            font-weight: 500;
+        }
+        
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-light);
+            border-radius: 20px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-color);
+        }
+        
+        html {
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-light) transparent;
+        }
+        
+        /* Mobile touch optimizations */
+        @media (max-width: 640px) {
+            /* Larger touch targets */
+            button, input, select, textarea {
+                min-height: 44px;
+            }
+            
+            /* Better spacing for mobile */
+            .space-y-3 > * + * {
+                margin-top: 0.75rem;
+            }
+            
+            /* Prevent zoom on input focus */
+            input, select, textarea {
+                font-size: 16px;
+            }
+            
+            /* Hide scrollbar on mobile for cleaner look */
+            ::-webkit-scrollbar {
+                width: 3px;
+            }
+            
+            /* Optimize floating animations for mobile */
+            .floating-hearts::before,
+            .floating-hearts::after {
+                font-size: 12px;
+                letter-spacing: 80px;
+            }
+            
+            /* Reduce animation intensity on mobile */
+            .kawaii-glow {
+                animation: none;
+            }
+            
+            /* Better mobile button sizing */
+            .cute-button {
+                padding: 12px 20px;
+                font-size: 14px;
+            }
+            
+            /* Mobile-friendly input styling */
+            .cute-input {
+                border-radius: 16px;
+                padding: 12px 16px;
+                font-size: 16px;
+            }
+            
+            /* Mobile card adjustments */
+            .kawaii-card {
+                border-radius: 16px;
+            }
+        }
+        
+        .bg-theme-gradient {
+            background: linear-gradient(135deg, var(--bg-gradient-from), var(--bg-gradient-via), var(--bg-gradient-to));
+        }
+        
+        .cute-shadow {
+            box-shadow: 0 4px 12px var(--shadow-color), 0 0 8px rgba(255, 255, 255, 0.5) inset;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        
+        .super-cute-shadow {
+            box-shadow: 
+                0 6px 16px rgba(139, 92, 246, 0.15),
+                0 0 12px rgba(255, 255, 255, 0.6) inset;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+        }
+        
+        .kawaii-glow {
+            box-shadow: 
+                0 0 8px rgba(139, 92, 246, 0.2),
+                0 0 16px rgba(139, 92, 246, 0.1);
+            animation: kawaii-pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes kawaii-pulse {
+            0%, 100% { 
+                box-shadow: 
+                    0 0 8px rgba(139, 92, 246, 0.2),
+                    0 0 16px rgba(139, 92, 246, 0.1);
+            }
+            50% { 
+                box-shadow: 
+                    0 0 12px rgba(139, 92, 246, 0.25),
+                    0 0 20px rgba(139, 92, 246, 0.15);
+            }
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            box-shadow: 
+                0 4px 12px rgba(139, 92, 246, 0.2),
+                0 0 8px rgba(255, 255, 255, 0.4) inset;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--secondary-color));
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 
+                0 6px 16px rgba(139, 92, 246, 0.25),
+                0 0 12px rgba(255, 255, 255, 0.5) inset;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            50% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+            100% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+        }
+        
+        .cute-button {
+            background: linear-gradient(135deg, var(--cute-pink), var(--cute-purple));
+            border-radius: 16px;
+            padding: 10px 20px;
+            color: white;
+            font-weight: 500;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+            box-shadow: 
+                0 3px 8px rgba(139, 92, 246, 0.2),
+                0 0 6px rgba(255, 255, 255, 0.3) inset;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .cute-button:hover {
+            transform: translateY(-1px) scale(1.03);
+            box-shadow: 
+                0 5px 12px rgba(139, 92, 246, 0.25),
+                0 0 8px rgba(255, 255, 255, 0.4) inset;
+        }
+        
+        .text-primary {
+            color: var(--primary-color);
+        }
+        
+        .border-primary {
+            border-color: var(--primary-light);
+        }
+        
+        .bg-primary-light {
+            background-color: var(--primary-light);
+        }
+        
+        .bounce-in {
+            animation: bounceIn 0.6s ease-out;
+        }
+        
+        @keyframes bounceIn {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); }
+            70% { transform: scale(0.9); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .wiggle {
+            animation: wiggle 0.5s ease-in-out;
+        }
+        
+        @keyframes wiggle {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-3deg); }
+            75% { transform: rotate(3deg); }
+        }
+        
+        .completed-task {
+            animation: completePulse 0.6s ease-out;
+        }
+        
+        @keyframes completePulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); background-color: #fef3c7; }
+            100% { transform: scale(1); }
+        }
+        
+        .float-animation {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        /* Enhanced Sakura Theme Animations - The Most Beautiful! */
+        .sakura-petals {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sakura-petals::before {
+            content: '🌸 🌸 🌸 🌸 🌸';
+            position: absolute;
+            top: -50px;
+            left: -100px;
+            width: calc(100vw + 200px);
+            font-size: 18px;
+            animation: sakuraPetalShower 12s linear infinite;
+            opacity: 0.9;
+            letter-spacing: 50px;
+        }
+        
+        .sakura-petals::after {
+            content: '🌺 🌸 🌺 🌸 🌺';
+            position: absolute;
+            top: -80px;
+            left: -150px;
+            width: calc(100vw + 300px);
+            font-size: 16px;
+            animation: sakuraPetalShower2 15s linear infinite;
+            opacity: 0.7;
+            letter-spacing: 80px;
+            animation-delay: -3s;
+        }
+        
+        @keyframes sakuraPetalShower {
+            0% { 
+                transform: translateY(-80px) rotate(0deg); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.9; }
+            90% { opacity: 0.9; }
+            100% { 
+                transform: translateY(calc(100vh + 80px)) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes sakuraPetalShower2 {
+            0% { 
+                transform: translateY(-100px) rotate(0deg) translateX(20px); 
+                opacity: 0; 
+            }
+            15% { opacity: 0.7; }
+            85% { opacity: 0.7; }
+            100% { 
+                transform: translateY(calc(100vh + 100px)) rotate(-360deg) translateX(-20px); 
+                opacity: 0; 
+            }
+        }
+        
+        /* Enhanced Ocean Theme Animations */
+        .ocean-waves {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .ocean-waves::before {
+            content: '🌊 🌊 🌊';
+            position: absolute;
+            top: 15%;
+            left: -200px;
+            font-size: 24px;
+            animation: oceanWaveFlow 8s ease-in-out infinite;
+            opacity: 0.8;
+            letter-spacing: 30px;
+        }
+        
+        .ocean-waves::after {
+            content: '🐠 🐟 🦈 🐙';
+            position: absolute;
+            bottom: 25%;
+            right: -300px;
+            font-size: 18px;
+            animation: marineLifeSwim 12s linear infinite;
+            opacity: 0.7;
+            letter-spacing: 40px;
+        }
+        
+        @keyframes oceanWaveFlow {
+            0%, 100% { 
+                transform: translateX(-200px) translateY(0px) scale(1); 
+                opacity: 0.6; 
+            }
+            50% { 
+                transform: translateX(calc(100vw + 200px)) translateY(-20px) scale(1.1); 
+                opacity: 0.9; 
+            }
+        }
+        
+        @keyframes marineLifeSwim {
+            0% { 
+                transform: translateX(calc(100vw + 300px)) scaleX(1) rotate(0deg); 
+                opacity: 0.5; 
+            }
+            25% { opacity: 0.8; }
+            75% { opacity: 0.8; }
+            100% { 
+                transform: translateX(-300px) scaleX(1) rotate(10deg); 
+                opacity: 0.5; 
+            }
+        }
+        
+        /* Enhanced Forest Theme Animations */
+        .forest-leaves {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .forest-leaves::before {
+            content: '🍃 🌿 🍂 🌱';
+            position: absolute;
+            top: -60px;
+            left: 5%;
+            animation: forestLeafDance 10s ease-in-out infinite;
+            opacity: 0.8;
+            font-size: 20px;
+            letter-spacing: 25px;
+        }
+        
+        .forest-leaves::after {
+            content: '🦋 🐛 🕷️';
+            position: absolute;
+            top: 30%;
+            right: 10%;
+            animation: forestCreatures 8s ease-in-out infinite;
+            opacity: 0.6;
+            font-size: 16px;
+            letter-spacing: 20px;
+        }
+        
+        @keyframes forestLeafDance {
+            0% { 
+                transform: translateY(-60px) rotate(0deg) translateX(0px); 
+                opacity: 0; 
+            }
+            20% { opacity: 0.8; }
+            40% { transform: translateY(20vh) rotate(180deg) translateX(10px); }
+            60% { transform: translateY(40vh) rotate(270deg) translateX(-10px); }
+            80% { opacity: 0.8; }
+            100% { 
+                transform: translateY(calc(100vh + 60px)) rotate(360deg) translateX(0px); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes forestCreatures {
+            0%, 100% { 
+                transform: translateX(0px) translateY(0px) rotate(0deg); 
+                opacity: 0.4; 
+            }
+            25% { 
+                transform: translateX(20px) translateY(-15px) rotate(5deg); 
+                opacity: 0.8; 
+            }
+            50% { 
+                transform: translateX(40px) translateY(10px) rotate(-3deg); 
+                opacity: 0.9; 
+            }
+            75% { 
+                transform: translateX(20px) translateY(-5px) rotate(3deg); 
+                opacity: 0.7; 
+            }
+        }
+        
+        /* Enhanced Sunset Theme Animations */
+        .sunset-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .sunset-glow::before {
+            content: '☀️';
+            position: absolute;
+            top: 10%;
+            right: 15%;
+            font-size: 32px;
+            animation: sunGoldenGlow 10s ease-in-out infinite;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 20px #fbbf24);
+        }
+        
+        .sunset-glow::after {
+            content: '🌅 ✨ 🌇';
+            position: absolute;
+            bottom: 15%;
+            left: 5%;
+            font-size: 22px;
+            animation: sunsetMagic 12s ease-in-out infinite;
+            opacity: 0.7;
+            letter-spacing: 30px;
+        }
+        
+        @keyframes sunGoldenGlow {
+            0%, 100% { 
+                transform: translateY(0px) scale(1) rotate(0deg); 
+                opacity: 0.7; 
+                filter: drop-shadow(0 0 15px #fbbf24);
+            }
+            25% { 
+                transform: translateY(-20px) scale(1.2) rotate(90deg); 
+                opacity: 1; 
+                filter: drop-shadow(0 0 30px #f59e0b);
+            }
+            50% { 
+                transform: translateY(-10px) scale(1.1) rotate(180deg); 
+                opacity: 0.9; 
+                filter: drop-shadow(0 0 25px #fbbf24);
+            }
+            75% { 
+                transform: translateY(-15px) scale(1.15) rotate(270deg); 
+                opacity: 1; 
+                filter: drop-shadow(0 0 35px #f97316);
+            }
+        }
+        
+        @keyframes sunsetMagic {
+            0%, 100% { 
+                opacity: 0.5; 
+                transform: scale(0.9) translateY(0px); 
+            }
+            33% { 
+                opacity: 0.9; 
+                transform: scale(1.1) translateY(-10px); 
+            }
+            66% { 
+                opacity: 0.8; 
+                transform: scale(1.05) translateY(-5px); 
+            }
+        }
+        
+        /* Enhanced Space Theme Animations */
+        .space-stars {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .space-stars::before {
+            content: '⭐ 🌟 ✨ 💫';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            animation: cosmicTwinkle 6s ease-in-out infinite;
+            font-size: 20px;
+            letter-spacing: 40px;
+            opacity: 0.9;
+        }
+        
+        .space-stars::after {
+            content: '🌌 🪐 🌙';
+            position: absolute;
+            bottom: 25%;
+            right: 15%;
+            animation: galaxyRotation 15s linear infinite;
+            font-size: 24px;
+            letter-spacing: 35px;
+            opacity: 0.8;
+        }
+        
+        @keyframes cosmicTwinkle {
+            0%, 100% { 
+                opacity: 0.4; 
+                transform: scale(0.8) rotate(0deg); 
+                filter: brightness(0.8);
+            }
+            25% { 
+                opacity: 1; 
+                transform: scale(1.3) rotate(90deg); 
+                filter: brightness(1.5);
+            }
+            50% { 
+                opacity: 0.7; 
+                transform: scale(1.1) rotate(180deg); 
+                filter: brightness(1.2);
+            }
+            75% { 
+                opacity: 1; 
+                transform: scale(1.4) rotate(270deg); 
+                filter: brightness(1.6);
+            }
+        }
+        
+        @keyframes galaxyRotation {
+            0% { 
+                transform: rotate(0deg) scale(1); 
+                opacity: 0.6; 
+            }
+            25% { 
+                transform: rotate(90deg) scale(1.1); 
+                opacity: 0.9; 
+            }
+            50% { 
+                transform: rotate(180deg) scale(1.05); 
+                opacity: 0.8; 
+            }
+            75% { 
+                transform: rotate(270deg) scale(1.15); 
+                opacity: 1; 
+            }
+            100% { 
+                transform: rotate(360deg) scale(1); 
+                opacity: 0.6; 
+            }
+        }
+        
+        /* Enhanced Lavender Theme Animations */
+        .lavender-field {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .lavender-field::before {
+            content: '💜 🌾 💜 🌾';
+            position: absolute;
+            top: 30%;
+            left: 5%;
+            animation: lavenderFieldSway 8s ease-in-out infinite;
+            font-size: 20px;
+            opacity: 0.8;
+            letter-spacing: 25px;
+        }
+        
+        .lavender-field::after {
+            content: '🦋 🐝 🦋';
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            animation: butterflyGarden 10s ease-in-out infinite;
+            font-size: 18px;
+            opacity: 0.9;
+            letter-spacing: 30px;
+        }
+        
+        @keyframes lavenderFieldSway {
+            0%, 100% { 
+                transform: translateX(0px) rotate(0deg) scale(1); 
+                opacity: 0.6; 
+            }
+            25% { 
+                transform: translateX(10px) rotate(3deg) scale(1.05); 
+                opacity: 0.9; 
+            }
+            50% { 
+                transform: translateX(5px) rotate(0deg) scale(1.1); 
+                opacity: 1; 
+            }
+            75% { 
+                transform: translateX(-10px) rotate(-3deg) scale(1.05); 
+                opacity: 0.8; 
+            }
+        }
+        
+        @keyframes butterflyGarden {
+            0%, 100% { 
+                transform: translateX(0px) translateY(0px) rotate(0deg) scale(1); 
+                opacity: 0.7; 
+            }
+            20% { 
+                transform: translateX(25px) translateY(-15px) rotate(10deg) scale(1.1); 
+                opacity: 1; 
+            }
+            40% { 
+                transform: translateX(50px) translateY(10px) rotate(-5deg) scale(1.05); 
+                opacity: 0.9; 
+            }
+            60% { 
+                transform: translateX(30px) translateY(-20px) rotate(8deg) scale(1.15); 
+                opacity: 1; 
+            }
+            80% { 
+                transform: translateX(10px) translateY(-5px) rotate(-3deg) scale(1.08); 
+                opacity: 0.8; 
+            }
+        }
+        
+        /* Custom Theme Variables */
+        .custom-theme {
+            --custom-primary: #ec4899;
+            --custom-secondary: #a855f7;
+            --custom-bg-from: #fce7f3;
+            --custom-bg-via: #faf5ff;
+            --custom-bg-to: #e0e7ff;
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px var(--shadow-color); }
+            50% { box-shadow: 0 0 30px var(--shadow-color), 0 0 40px var(--shadow-color); }
+        }
+        
+        .cute-input {
+            border-radius: 20px;
+            border: 3px solid rgba(255, 182, 193, 0.5);
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 
+                0 4px 15px rgba(255, 182, 193, 0.2),
+                0 0 10px rgba(255, 255, 255, 0.8) inset;
+            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            backdrop-filter: blur(5px);
+        }
+        
+        .cute-input:focus {
+            border-color: var(--cute-pink);
+            box-shadow: 
+                0 6px 20px rgba(255, 105, 180, 0.3),
+                0 0 15px rgba(255, 255, 255, 0.9) inset,
+                0 0 25px rgba(255, 105, 180, 0.2);
+            transform: translateY(-2px) scale(1.02);
+        }
+        
+        .cute-select {
+            border-radius: 15px;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 
+                0 3px 10px rgba(255, 182, 193, 0.2),
+                0 0 8px rgba(255, 255, 255, 0.7) inset;
+            transition: all 0.3s ease;
+        }
+        
+        .cute-select:focus {
+            border-color: var(--cute-pink);
+            box-shadow: 
+                0 5px 15px rgba(255, 105, 180, 0.3),
+                0 0 12px rgba(255, 255, 255, 0.8) inset;
+        }
+        
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, var(--primary-light), var(--secondary-color));
+            outline: none;
+        }
+        
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        /* Floating Hearts Background */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+        
+        .floating-hearts::before {
+            content: '💜 💙 💚 💛 🤍 💜 💙 💚';
+            position: absolute;
+            top: -100px;
+            left: -100px;
+            width: calc(100vw + 200px);
+            font-size: 16px;
+            animation: floatingHearts1 35s linear infinite;
+            opacity: 0.3;
+            letter-spacing: 120px;
+        }
+        
+        .floating-hearts::after {
+            content: '✨ 🌟 ⭐ 💫 ✨ 🌟 ⭐ 💫';
+            position: absolute;
+            top: -150px;
+            left: -150px;
+            width: calc(100vw + 300px);
+            font-size: 14px;
+            animation: floatingHearts2 40s linear infinite;
+            opacity: 0.25;
+            letter-spacing: 140px;
+            animation-delay: -15s;
+        }
+        
+        @keyframes floatingHearts1 {
+            0% { 
+                transform: translateY(-100px) translateX(0px) rotate(0deg); 
+                opacity: 0; 
+            }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { 
+                transform: translateY(calc(100vh + 100px)) translateX(50px) rotate(360deg); 
+                opacity: 0; 
+            }
+        }
+        
+        @keyframes floatingHearts2 {
+            0% { 
+                transform: translateY(-150px) translateX(20px) rotate(0deg) scale(0.8); 
+                opacity: 0; 
+            }
+            15% { opacity: 0.5; }
+            85% { opacity: 0.5; }
+            100% { 
+                transform: translateY(calc(100vh + 150px)) translateX(-30px) rotate(-360deg) scale(1.2); 
+                opacity: 0; 
+            }
+        }
+        
+        /* Cute Card Styles */
+        .kawaii-card {
+            background: linear-gradient(135deg, 
+                rgba(255, 255, 255, 0.9), 
+                rgba(248, 250, 252, 0.9));
+            border-radius: 20px;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 
+                0 6px 16px rgba(139, 92, 246, 0.1),
+                0 0 12px rgba(255, 255, 255, 0.6) inset;
+            backdrop-filter: blur(5px);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .kawaii-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: linear-gradient(45deg, 
+                rgba(139, 92, 246, 0.3), 
+                rgba(168, 85, 247, 0.3), 
+                rgba(99, 102, 241, 0.3), 
+                rgba(139, 92, 246, 0.3));
+            border-radius: 20px;
+            z-index: -1;
+            animation: rainbow-border 8s linear infinite;
+        }
+        
+        @keyframes rainbow-border {
+            0% { opacity: 0.3; }
+            50% { opacity: 0.5; }
+            100% { opacity: 0.3; }
+        }
+        
+        /* ============================= */
+/* FINAL MOBILE EXPERIENCE */
+/* DESKTOP SAFE */
+/* ============================= */
+
+@media (max-width: 768px) {
+
+  body {
+    padding: 12px;
+  }
+
+  .max-w-4xl,
+  .max-w-5xl,
+  .container {
+    max-width: 100% !important;
+    border-radius: 20px;
+  }
+
+  .cute-title {
+    font-size: 1.8rem !important;
+    text-align: center;
+  }
+
+  input, textarea, select {
+    font-size: 16px !important;
+    padding: 14px !important;
+    border-radius: 16px !important;
+  }
+
+  button {
+    width: 100%;
+    padding: 14px !important;
+    font-size: 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .todo-item {
+    padding: 16px !important;
+    border-radius: 18px !important;
+  }
+
+  .flex-row {
+    flex-direction: column !important;
+  }
+
+  .todo-actions {
+    display: flex;
+    gap: 10px;
+  }
+
+  .todo-actions button {
+    flex: 1;
+    font-size: 14px;
+  }
+
+  button:active {
+    transform: scale(0.96);
+    opacity: 0.9;
+  }
+}
+    </style>
+</head>
+<!-- OFFLINE AI ASSISTANT -->
+<div id="aiAssistant" class="fixed bottom-4 right-4 z-50">
+  <button onclick="toggleAI()" class="bg-pink-400 hover:bg-pink-500 text-white px-4 py-3 rounded-full shadow-xl">
+    💖 AI
+  </button>
+</div>
+
+<div id="aiBox" class="hidden fixed bottom-20 right-4 bg-white rounded-3xl p-4 w-72 shadow-2xl border-2 border-pink-200">
+  <div class="font-bold text-pink-500 mb-2">Lyra Assistant 🌸</div>
+  <div id="aiText" class="text-sm text-gray-700 mb-3">
+    Hai~ Aku siap bantu kamu 💕
+  </div>
+  <button onclick="aiSuggest()" class="w-full bg-pink-300 hover:bg-pink-400 text-white py-2 rounded-xl">
+    ✨ Saran Tugas
+  </button>
+</div>
+
+<script>
+function toggleAI() {
+  document.getElementById('aiBox').classList.toggle('hidden');
+}
+
+function aiSuggest() {
+  const tips = [
+    "🌸 Kerjakan tugas kecil dulu ya~",
+    "💪 Kamu hebat! Jangan lupa istirahat",
+    "📝 Sedikit tapi konsisten lebih baik",
+    "⏰ Atur jadwal biar nggak mepet",
+    "✨ Kamu pasti bisa hari ini!"
+  ];
+  document.getElementById('aiText').innerText =
+    tips[Math.floor(Math.random() * tips.length)];
+}
+</script>
+<body class="bg-theme-gradient">
+    <!-- Floating Hearts Background -->
+    <div class="floating-hearts"></div>
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md border-b-4 border-pink-200 sticky top-0 z-50 kawaii-glow">
+        <div class="max-w-4xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-2 sm:space-x-3">
+                <span class="text-2xl sm:text-3xl float-animation">🌸</span>
+                <h1 class="text-lg sm:text-2xl font-bold cute-title text-primary">Todo Imut</h1>
+                <span class="text-sm sm:text-lg">✨</span>
+            </div>
+            <button id="settingsBtn" class="p-2 sm:p-3 rounded-full cute-button kawaii-glow">
+                <span class="text-lg sm:text-xl">⚙️</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Todo Page -->
+    <div id="todoPage" class="max-w-2xl mx-auto p-2 sm:p-4 pb-16 sm:pb-20" style="min-height: calc(100vh - 60px);">
+        <!-- Header -->
+        <div class="text-center mb-4 sm:mb-8 kawaii-card p-4 sm:p-6">
+            <div class="text-4xl sm:text-6xl mb-3 sm:mb-4 float-animation">🦄</div>
+            <h2 class="text-xl sm:text-3xl font-bold cute-title text-gray-700 mb-2 sm:mb-3 kawaii-glow">Hari yang Produktif!</h2>
+            <p class="text-gray-600 text-sm sm:text-lg cute-text mb-3 sm:mb-4">Yuk selesaikan tugas-tugas kamu hari ini ✨</p>
+            <div class="flex justify-center space-x-1 sm:space-x-2 text-lg sm:text-2xl">
+                <span class="float-animation" style="animation-delay: 0s;">🌈</span>
+                <span class="float-animation" style="animation-delay: 0.5s;">💖</span>
+                <span class="float-animation" style="animation-delay: 1s;">🎀</span>
+                <span class="float-animation" style="animation-delay: 1.5s;">✨</span>
+                <span class="float-animation" style="animation-delay: 2s;">🌸</span>
+            </div>
+        </div>
+
+        <!-- Add Todo Form -->
+        <div class="kawaii-card p-3 sm:p-6 mb-4 sm:mb-6 super-cute-shadow">
+            <div class="text-center mb-3 sm:mb-4">
+                <h3 class="text-lg sm:text-xl font-bold cute-title text-gray-700 mb-2">Tambah Tugas Baru 📝</h3>
+                <div class="flex justify-center space-x-1 text-base sm:text-lg">
+                    <span>🌟</span><span>💫</span><span>✨</span>
+                </div>
+            </div>
+            <div class="space-y-3 sm:space-y-5">
+                <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3">
+                    <input 
+                        type="text" 
+                        id="todoInput" 
+                        placeholder="Tulis sesuatu yang imut untuk dilakukan... 🎀"
+                        class="flex-1 px-3 sm:px-5 py-3 sm:py-4 cute-input text-gray-700 cute-text font-medium text-sm sm:text-base"
+                    >
+                    <button 
+                        id="addBtn"
+                        class="px-4 sm:px-8 py-3 sm:py-4 btn-primary text-white font-bold cute-text text-sm sm:text-lg whitespace-nowrap"
+                    >
+                        <span id="addBtnText">Tambah 🌟</span>
+                    </button>
+                </div>
+                
+                <!-- Description Section -->
+                <div>
+                    <textarea 
+                        id="todoDescription" 
+                        placeholder="Deskripsi detail tugas (opsional)... 📝"
+                        class="w-full px-3 sm:px-5 py-3 sm:py-4 cute-input text-gray-700 resize-none cute-text text-sm sm:text-base"
+                        rows="2"
+                    ></textarea>
+                </div>
+                
+                <!-- Category and Priority Section -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold cute-text text-gray-700 mb-2 sm:mb-3">📂 Kategori</label>
+                        <select id="todoCategory" class="w-full px-3 sm:px-4 py-2 sm:py-3 cute-select cute-text text-sm sm:text-base">
+                            <option value="personal">👤 Personal</option>
+                            <option value="work">💼 Pekerjaan</option>
+                            <option value="study">📚 Belajar</option>
+                            <option value="health">🏃‍♀️ Kesehatan</option>
+                            <option value="family">👨‍👩‍👧‍👦 Keluarga</option>
+                            <option value="hobby">🎨 Hobi</option>
+                            <option value="shopping">🛒 Belanja</option>
+                            <option value="custom">✨ Lainnya</option>
+                        </select>
+                        <input 
+                            type="text" 
+                            id="customCategory" 
+                            placeholder="Tulis kategori sendiri..."
+                            class="w-full px-3 sm:px-4 py-2 sm:py-3 cute-input cute-text mt-2 sm:mt-3 hidden text-sm sm:text-base"
+                        >
+                    </div>
+                    <div>
+                        <label class="block text-xs sm:text-sm font-bold cute-text text-gray-700 mb-2 sm:mb-3">⭐ Prioritas</label>
+                        <select id="todoPriority" class="w-full px-3 sm:px-4 py-2 sm:py-3 cute-select cute-text text-sm sm:text-base">
+                            <option value="low">🟢 Rendah</option>
+                            <option value="medium" selected>🟡 Sedang</option>
+                            <option value="high">🟠 Tinggi</option>
+                            <option value="urgent">🔴 Mendesak</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Schedule Section -->
+                <div class="flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3 items-stretch sm:items-center">
+                    <div class="flex items-center space-x-2 bg-gradient-to-r from-blue-50 to-purple-50 p-2 sm:p-3 rounded-2xl border-2 border-blue-200 flex-1 sm:flex-none">
+                        <span class="text-base sm:text-lg">📅</span>
+                        <input 
+                            type="date" 
+                            id="todoDate"
+                            class="px-2 sm:px-3 py-1 sm:py-2 cute-select cute-text text-xs sm:text-sm bg-transparent border-none flex-1"
+                        >
+                    </div>
+                    <div class="flex items-center space-x-2 bg-gradient-to-r from-orange-50 to-yellow-50 p-2 sm:p-3 rounded-2xl border-2 border-orange-200 flex-1 sm:flex-none">
+                        <span class="text-base sm:text-lg">⏰</span>
+                        <input 
+                            type="time" 
+                            id="todoTime"
+                            class="px-2 sm:px-3 py-1 sm:py-2 cute-select cute-text text-xs sm:text-sm bg-transparent border-none flex-1"
+                        >
+                    </div>
+                    <button 
+                        id="cancelEditBtn"
+                        class="px-3 sm:px-5 py-2 sm:py-3 bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 text-red-700 rounded-2xl transition-all transform hover:scale-105 cute-text font-semibold border-2 border-red-200 hidden text-sm sm:text-base"
+                    >
+                        Batal ❌
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-2 sm:gap-4 mb-4 sm:mb-6">
+            <div class="kawaii-card p-3 sm:p-5 text-center super-cute-shadow">
+                <div class="text-2xl sm:text-3xl mb-1 sm:mb-2 float-animation">📝</div>
+                <div class="text-lg sm:text-2xl font-bold cute-title text-gray-700" id="totalTasks">0</div>
+                <div class="text-xs sm:text-sm cute-text text-gray-600 font-semibold">Total Tugas</div>
+            </div>
+            <div class="kawaii-card p-3 sm:p-5 text-center super-cute-shadow">
+                <div class="text-2xl sm:text-3xl mb-1 sm:mb-2 float-animation" style="animation-delay: 0.5s;">✅</div>
+                <div class="text-lg sm:text-2xl font-bold cute-title text-green-600" id="completedTasks">0</div>
+                <div class="text-xs sm:text-sm cute-text text-gray-600 font-semibold">Selesai</div>
+            </div>
+            <div class="kawaii-card p-3 sm:p-5 text-center super-cute-shadow">
+                <div class="text-2xl sm:text-3xl mb-1 sm:mb-2 float-animation" style="animation-delay: 1s;">⏰</div>
+                <div class="text-lg sm:text-2xl font-bold cute-title text-orange-600" id="pendingTasks">0</div>
+                <div class="text-xs sm:text-sm cute-text text-gray-600 font-semibold">Pending</div>
+            </div>
+        </div>
+
+        <!-- Todo List -->
+        <div class="kawaii-card p-3 sm:p-6 super-cute-shadow">
+            <h3 class="text-lg sm:text-2xl font-bold cute-title text-gray-700 mb-4 sm:mb-6 flex items-center justify-center">
+                <span class="mr-2 sm:mr-3 text-2xl sm:text-3xl float-animation">📋</span>
+                Daftar Tugas kamu
+                <span class="ml-2 sm:ml-3 text-2xl sm:text-3xl float-animation" style="animation-delay: 1s;">✨</span>
+            </h3>
+            <div id="todoList" class="space-y-3 sm:space-y-4">
+                <!-- Todos will be added here -->
+            </div>
+            <div id="emptyState" class="text-center py-8 sm:py-12 text-gray-500">
+                <div class="text-4xl sm:text-6xl mb-3 sm:mb-4 float-animation">🎈</div>
+                <p class="text-lg sm:text-xl cute-text font-semibold mb-2">Belum ada tugas nih!</p>
+                <p class="cute-text text-sm sm:text-base">Yuk tambah yang pertama 💕</p>
+                <div class="flex justify-center space-x-1 sm:space-x-2 mt-3 sm:mt-4 text-lg sm:text-2xl">
+                    <span class="float-animation" style="animation-delay: 0s;">🌟</span>
+                    <span class="float-animation" style="animation-delay: 0.5s;">💫</span>
+                    <span class="float-animation" style="animation-delay: 1s;">✨</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Page -->
+    <div id="settingsPage" class="max-w-2xl mx-auto p-2 sm:p-4 pb-16 sm:pb-20 hidden" style="min-height: calc(100vh - 60px);">
+        <div class="kawaii-card p-3 sm:p-6 super-cute-shadow">
+            <div class="text-center mb-6 sm:mb-8">
+                <div class="flex items-center justify-center mb-3 sm:mb-4">
+                    <span class="text-3xl sm:text-4xl float-animation mr-2 sm:mr-3">⚙️</span>
+                    <h2 class="text-xl sm:text-3xl font-bold cute-title text-gray-700">Pengaturan Imut</h2>
+                    <span class="text-3xl sm:text-4xl float-animation ml-2 sm:ml-3" style="animation-delay: 1s;">✨</span>
+                </div>
+                <div class="flex justify-center space-x-1 sm:space-x-2 text-lg sm:text-2xl mb-3 sm:mb-4">
+                    <span class="float-animation" style="animation-delay: 0s;">🎨</span>
+                    <span class="float-animation" style="animation-delay: 0.5s;">🔧</span>
+                    <span class="float-animation" style="animation-delay: 1s;">💫</span>
+                </div>
+                <button id="backBtn" class="cute-button kawaii-glow px-4 py-2 sm:px-6 sm:py-3">
+                    <span class="text-lg sm:text-xl mr-1 sm:mr-2">🔙</span>
+                    <span class="cute-text font-bold text-sm sm:text-base">Kembali</span>
+                </button>
+            </div>
+
+            <!-- Theme Settings -->
+            <div class="mb-6 sm:mb-10">
+                <div class="text-center mb-4 sm:mb-6">
+                    <h3 class="text-lg sm:text-2xl font-bold cute-title text-gray-700 mb-2 flex items-center justify-center">
+                        <span class="mr-2 sm:mr-3 text-2xl sm:text-3xl float-animation">🎨</span>
+                        Tema Animasi Imut
+                        <span class="ml-2 sm:ml-3 text-2xl sm:text-3xl float-animation" style="animation-delay: 1s;">🌈</span>
+                    </h3>
+                    <p class="cute-text text-gray-600 text-sm sm:text-base">Pilih tema yang paling kamu suka!</p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4" id="themeGrid">
+                    <!-- Themes will be generated here -->
+                </div>
+            </div>
+
+            <!-- Custom Theme Creator -->
+            <div class="mb-8" id="customThemeSection">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">🎨</span>
+                    Buat Tema Sendiri
+                </h3>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-4 rounded-3xl border-2 border-purple-200">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Warna Utama</label>
+                            <input type="color" id="customPrimary" value="#ec4899" class="w-full h-12 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Warna Sekunder</label>
+                            <input type="color" id="customSecondary" value="#a855f7" class="w-full h-12 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Background Awal</label>
+                            <input type="color" id="customBgFrom" value="#fce7f3" class="w-full h-12 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">Background Akhir</label>
+                            <input type="color" id="customBgTo" value="#e0e7ff" class="w-full h-12 rounded-2xl border-2 border-gray-200 cursor-pointer">
+                        </div>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="previewCustomTheme" class="flex-1 p-3 bg-purple-200 hover:bg-purple-300 rounded-2xl text-purple-700 font-semibold transition-colors">
+                            👀 Preview
+                        </button>
+                        <button id="saveCustomTheme" class="flex-1 p-3 bg-green-200 hover:bg-green-300 rounded-2xl text-green-700 font-semibold transition-colors">
+                            💾 Simpan Tema
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brightness Control -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">💡</span>
+                    Kecerahan Layar
+                </h3>
+                <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-5 rounded-3xl border-2 border-yellow-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-2xl">🌙</span>
+                        <span class="text-sm font-medium text-gray-600" id="brightnessValue">100%</span>
+                        <span class="text-2xl">☀️</span>
+                    </div>
+                    <input type="range" id="brightnessSlider" min="0.3" max="1.2" step="0.1" value="1" class="slider w-full">
+                </div>
+            </div>
+
+            <!-- Font Size Control -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">📝</span>
+                    Ukuran Teks
+                </h3>
+                <div class="bg-gradient-to-r from-purple-50 to-pink-50 p-5 rounded-3xl border-2 border-purple-200">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-sm">Aa</span>
+                        <span class="text-sm font-medium text-gray-600" id="fontSizeValue">Normal</span>
+                        <span class="text-xl">Aa</span>
+                    </div>
+                    <input type="range" id="fontSizeSlider" min="0.8" max="1.4" step="0.1" value="1" class="slider w-full">
+                </div>
+            </div>
+
+            <!-- Sound Settings -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">🔊</span>
+                    Pengaturan Suara & Alarm
+                </h3>
+                <div class="space-y-4">
+                    <label class="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-3xl border-2 border-pink-200 hover:border-pink-300 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">🎉</span>
+                            <div>
+                                <div class="font-semibold">Suara saat menyelesaikan tugas</div>
+                                <div class="text-sm text-gray-500">Bunyi celebrasi yang imut!</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="completionSound" class="w-6 h-6 text-pink-500 rounded-lg">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-3xl border-2 border-blue-200 hover:border-blue-300 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">✨</span>
+                            <div>
+                                <div class="font-semibold">Suara saat menambah tugas</div>
+                                <div class="text-sm text-gray-500">Bunyi magis saat menambah!</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="addSound" class="w-6 h-6 text-blue-500 rounded-lg">
+                    </label>
+                    <label class="flex items-center justify-between p-4 bg-gradient-to-r from-orange-50 to-yellow-50 rounded-3xl border-2 border-orange-200 hover:border-orange-300 transition-colors cursor-pointer">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">⏰</span>
+                            <div>
+                                <div class="font-semibold">Alarm untuk jadwal tugas</div>
+                                <div class="text-sm text-gray-500">Bunyi pengingat saat waktunya!</div>
+                            </div>
+                        </div>
+                        <input type="checkbox" id="alarmSound" class="w-6 h-6 text-orange-500 rounded-lg" checked>
+                    </label>
+                    
+                    <!-- Sound Volume Control -->
+                    <div class="p-4 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-3xl border-2 border-purple-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-semibold text-gray-700">🎵 Volume Suara</span>
+                            <span class="text-sm font-medium text-gray-600" id="volumeValue">50%</span>
+                        </div>
+                        <input type="range" id="volumeSlider" min="0" max="100" value="50" class="slider w-full">
+                    </div>
+                    
+                    <!-- Test Sound Buttons -->
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <button id="testCompletionSound" class="p-3 bg-green-100 hover:bg-green-200 rounded-2xl text-green-700 font-semibold transition-colors text-sm">
+                            🎉 Test Selesai
+                        </button>
+                        <button id="testAddSound" class="p-3 bg-blue-100 hover:bg-blue-200 rounded-2xl text-blue-700 font-semibold transition-colors text-sm">
+                            ✨ Test Tambah
+                        </button>
+                        <button id="testAlarmSound" class="p-3 bg-orange-100 hover:bg-orange-200 rounded-2xl text-orange-700 font-semibold transition-colors text-sm">
+                            ⏰ Test Alarm
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Motivational Settings -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">💪</span>
+                    Motivasi & Semangat
+                </h3>
+                <label class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl border-2 border-green-200 hover:border-green-300 transition-colors cursor-pointer">
+                    <div class="flex items-center">
+                        <span class="text-2xl mr-3">🌟</span>
+                        <div>
+                            <div class="font-semibold">Tampilkan pesan motivasi</div>
+                            <div class="text-sm text-gray-500">Kata-kata penyemangat yang lucu!</div>
+                        </div>
+                    </div>
+                    <input type="checkbox" id="motivationalMessages" class="w-6 h-6 text-green-500 rounded-lg" checked>
+                </label>
+            </div>
+
+            <!-- Data Management -->
+            <div class="mb-8">
+                <h3 class="text-lg font-semibold text-gray-700 mb-4 flex items-center">
+                    <span class="mr-2">💾</span>
+                    Kelola Data
+                </h3>
+                <div class="space-y-4">
+                    <button id="exportBtn" class="w-full p-4 bg-gradient-to-r from-blue-100 to-cyan-100 hover:from-blue-200 hover:to-cyan-200 rounded-3xl text-blue-700 font-bold transition-all transform hover:scale-105 border-2 border-blue-200">
+                        <span class="text-2xl mr-2">📤</span>
+                        Export Data Imut
+                        <div class="text-sm font-normal mt-1">Simpan semua tugas kamu!</div>
+                    </button>
+                    
+                    <div class="relative">
+                        <input type="file" id="importFile" accept=".json" class="hidden">
+                        <button id="importBtn" class="w-full p-4 bg-gradient-to-r from-green-100 to-emerald-100 hover:from-green-200 hover:to-emerald-200 rounded-3xl text-green-700 font-bold transition-all transform hover:scale-105 border-2 border-green-200">
+                            <span class="text-2xl mr-2">📥</span>
+                            Import Data Backup
+                            <div class="text-sm font-normal mt-1">Restore dari file backup!</div>
+                        </button>
+                    </div>
+                    
+                    <button id="clearBtn" class="w-full p-4 bg-gradient-to-r from-red-100 to-pink-100 hover:from-red-200 hover:to-pink-200 rounded-3xl text-red-700 font-bold transition-all transform hover:scale-105 border-2 border-red-200">
+                        <span class="text-2xl mr-2">🗑️</span>
+                        Hapus Semua Data
+                        <div class="text-sm font-normal mt-1">Mulai fresh dari awal!</div>
+                    </button>
+                </div>
+            </div>
+
+            <!-- About & Developer Info -->
+            <div class="text-center p-6 bg-gradient-to-r from-pink-50 via-purple-50 to-indigo-50 rounded-3xl border-2 border-pink-200 mb-6">
+                <div class="text-4xl mb-3 float-animation">💕</div>
+                <p class="text-lg font-bold text-gray-700">Todo List Cute v2.0</p>
+                <p class="text-sm text-gray-500 mt-2">Dibuat dengan cinta untuk produktivitas yang menyenangkan!</p>
+                <div class="flex justify-center space-x-2 mt-3 mb-4">
+                    <span class="text-lg">🌸</span>
+                    <span class="text-lg">✨</span>
+                    <span class="text-lg">🦄</span>
+                    <span class="text-lg">💖</span>
+                </div>
+                
+                <!-- Developer Info -->
+                <div class="bg-white/50 rounded-2xl p-4 mt-4">
+                    <div class="text-2xl mb-2">👨‍💻</div>
+                    <p class="font-bold text-gray-700 mb-1">Dibuat oleh:</p>
+                    <p class="text-purple-600 font-semibold mb-3">ART Code Developer</p>
+                    
+                    <!-- Contact Links -->
+                    <div class="space-y-2">
+                        <p class="text-sm font-medium text-gray-600 mb-2">📱 Hubungi Kami:</p>
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <a href="https://wa.me/6289505433030" target="_blank" class="flex items-center px-3 py-2 bg-green-100 hover:bg-green-200 rounded-xl text-green-700 text-sm font-medium transition-colors">
+                                <span class="mr-1">📱</span> WhatsApp
+                            </a>
+                            <a href="https://instagram.com/arielsulu" target="_blank" class="flex items-center px-3 py-2 bg-pink-100 hover:bg-pink-200 rounded-xl text-pink-700 text-sm font-medium transition-colors">
+                                <span class="mr-1">📸</span> Instagram
+                            </a>
+                            <a href="https://tiktok.com/@arilsulu" target="_blank" class="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-xl text-gray-700 text-sm font-medium transition-colors">
+                                <span class="mr-1">🎵</span> TikTok
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Copyright -->
+                <div class="mt-4 pt-3 border-t border-purple-200">
+                    <p class="text-xs text-gray-500">
+                        © 2024 ART Code Developer. All rights reserved.<br>
+                        <span class="text-purple-600">Made with ❤️ in Indonesia</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // State management
+        let todos = JSON.parse(localStorage.getItem('todos')) || [];
+        let settings = JSON.parse(localStorage.getItem('settings')) || {
+            theme: 'sakura',
+            completionSound: true,
+            addSound: true,
+            motivationalMessages: true,
+            brightness: 1,
+            fontSize: 1,
+            alarmSound: true,
+            volume: 50,
+            customTheme: {
+                primary: '#ec4899',
+                secondary: '#a855f7',
+                bgFrom: '#fce7f3',
+                bgTo: '#e0e7ff'
+            }
+        };
+        
+        let editingTodoId = null;
+        let alarmIntervals = new Map();
+
+        // Theme configurations
+        const themes = {
+            sakura: {
+                name: 'Sakura Dreams',
+                emoji: '🌸',
+                description: 'Kelopak sakura berguguran',
+                primary: '#d946ef',
+                primaryLight: '#e879f9',
+                primaryDark: '#a21caf',
+                secondary: '#8b5cf6',
+                bgFrom: '#f8fafc',
+                bgVia: '#f1f5f9',
+                bgTo: '#e2e8f0',
+                shadow: 'rgba(139, 92, 246, 0.15)',
+                animation: 'sakura-petals'
+            },
+            ocean: {
+                name: 'Ocean Breeze',
+                emoji: '🌊',
+                description: 'Ombak laut yang tenang',
+                primary: '#3b82f6',
+                primaryLight: '#93c5fd',
+                primaryDark: '#1d4ed8',
+                secondary: '#06b6d4',
+                bgFrom: '#dbeafe',
+                bgVia: '#e0f2fe',
+                bgTo: '#f0f9ff',
+                shadow: 'rgba(59, 130, 246, 0.3)',
+                animation: 'ocean-waves'
+            },
+            forest: {
+                name: 'Forest Whisper',
+                emoji: '🌿',
+                description: 'Daun bergoyang di hutan',
+                primary: '#10b981',
+                primaryLight: '#6ee7b7',
+                primaryDark: '#047857',
+                secondary: '#34d399',
+                bgFrom: '#d1fae5',
+                bgVia: '#ecfdf5',
+                bgTo: '#f0fdf4',
+                shadow: 'rgba(16, 185, 129, 0.3)',
+                animation: 'forest-leaves'
+            },
+            sunset: {
+                name: 'Golden Sunset',
+                emoji: '🌅',
+                description: 'Cahaya matahari terbenam',
+                primary: '#f59e0b',
+                primaryLight: '#fcd34d',
+                primaryDark: '#d97706',
+                secondary: '#f97316',
+                bgFrom: '#fef3c7',
+                bgVia: '#fffbeb',
+                bgTo: '#fff7ed',
+                shadow: 'rgba(245, 158, 11, 0.3)',
+                animation: 'sunset-glow'
+            },
+            space: {
+                name: 'Cosmic Night',
+                emoji: '🌌',
+                description: 'Bintang berkelap-kelip',
+                primary: '#8b5cf6',
+                primaryLight: '#c4b5fd',
+                primaryDark: '#6d28d9',
+                secondary: '#06b6d4',
+                bgFrom: '#1e1b4b',
+                bgVia: '#312e81',
+                bgTo: '#1e40af',
+                shadow: 'rgba(139, 92, 246, 0.4)',
+                animation: 'space-stars'
+            },
+            lavender: {
+                name: 'Lavender Field',
+                emoji: '💜',
+                description: 'Ladang lavender ungu',
+                primary: '#a855f7',
+                primaryLight: '#c084fc',
+                primaryDark: '#7c3aed',
+                secondary: '#ec4899',
+                bgFrom: '#f3e8ff',
+                bgVia: '#faf5ff',
+                bgTo: '#fce7f3',
+                shadow: 'rgba(168, 85, 247, 0.3)',
+                animation: 'lavender-field'
+            },
+            custom: {
+                name: 'Custom Theme',
+                emoji: '🎨',
+                description: 'Tema buatan sendiri',
+                primary: '#ec4899',
+                primaryLight: '#f9a8d4',
+                primaryDark: '#be185d',
+                secondary: '#a855f7',
+                bgFrom: '#fce7f3',
+                bgVia: '#faf5ff',
+                bgTo: '#e0e7ff',
+                shadow: 'rgba(255, 182, 193, 0.3)',
+                animation: 'float-animation'
+            }
+        };
+
+        // DOM elements
+        const todoInput = document.getElementById('todoInput');
+        const addBtn = document.getElementById('addBtn');
+        const todoList = document.getElementById('todoList');
+        const emptyState = document.getElementById('emptyState');
+        const settingsBtn = document.getElementById('settingsBtn');
+        const settingsPage = document.getElementById('settingsPage');
+        const todoPage = document.getElementById('todoPage');
+        const backBtn = document.getElementById('backBtn');
+
+        // Motivational messages
+        const motivationalMessages = [
+            "Keren banget! Kamu hebat! 🌟",
+            "Yeay! Satu lagi selesai! 🎉",
+            "Amazing! Keep going! 💪",
+            "Wah produktif sekali! 🚀",
+            "Good job, superstar! ⭐"
+        ];
+
+        // Initialize app
+        function init() {
+            generateThemeButtons();
+            loadSettings();
+            renderTodos();
+            updateStats();
+            
+            // Event listeners
+            addBtn.addEventListener('click', addTodo);
+            todoInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') addTodo();
+            });
+            settingsBtn.addEventListener('click', showSettings);
+            backBtn.addEventListener('click', showTodos);
+            document.getElementById('cancelEditBtn').addEventListener('click', cancelEdit);
+            
+            // Category toggle
+            document.getElementById('todoCategory').addEventListener('change', (e) => {
+                const customInput = document.getElementById('customCategory');
+                if (e.target.value === 'custom') {
+                    customInput.classList.remove('hidden');
+                    customInput.focus();
+                } else {
+                    customInput.classList.add('hidden');
+                    customInput.value = '';
+                }
+            });
+            
+            // Custom theme event listeners
+            document.getElementById('previewCustomTheme').addEventListener('click', previewCustomTheme);
+            document.getElementById('saveCustomTheme').addEventListener('click', saveCustomTheme);
+            
+            document.getElementById('completionSound').addEventListener('change', (e) => {
+                settings.completionSound = e.target.checked;
+                saveSettings();
+            });
+            
+            document.getElementById('addSound').addEventListener('change', (e) => {
+                settings.addSound = e.target.checked;
+                saveSettings();
+            });
+            
+            document.getElementById('alarmSound').addEventListener('change', (e) => {
+                settings.alarmSound = e.target.checked;
+                saveSettings();
+                
+                // Reset all alarms when alarm setting changes
+                if (settings.alarmSound) {
+                    todos.forEach(todo => {
+                        if (todo.date && todo.time && !todo.completed) {
+                            setAlarm(todo);
+                        }
+                    });
+                } else {
+                    alarmIntervals.forEach((timeoutId, todoId) => {
+                        clearTimeout(timeoutId);
+                    });
+                    alarmIntervals.clear();
+                }
+            });
+            
+            document.getElementById('motivationalMessages').addEventListener('change', (e) => {
+                settings.motivationalMessages = e.target.checked;
+                saveSettings();
+            });
+            
+            document.getElementById('volumeSlider').addEventListener('input', (e) => {
+                settings.volume = parseInt(e.target.value);
+                updateVolumeDisplay();
+                saveSettings();
+            });
+            
+            // Test sound buttons
+            document.getElementById('testCompletionSound').addEventListener('click', () => {
+                playSound('completion');
+            });
+            
+            document.getElementById('testAddSound').addEventListener('click', () => {
+                playSound('add');
+            });
+            
+            document.getElementById('testAlarmSound').addEventListener('click', () => {
+                playSound('alarm');
+            });
+            
+            document.getElementById('exportBtn').addEventListener('click', exportData);
+            document.getElementById('importBtn').addEventListener('click', () => {
+                document.getElementById('importFile').click();
+            });
+            document.getElementById('importFile').addEventListener('change', importData);
+            document.getElementById('clearBtn').addEventListener('click', clearAllData);
+            
+            // Brightness and font size controls
+            document.getElementById('brightnessSlider').addEventListener('input', (e) => {
+                settings.brightness = parseFloat(e.target.value);
+                applyBrightness();
+                updateBrightnessDisplay();
+                saveSettings();
+            });
+            
+            document.getElementById('fontSizeSlider').addEventListener('input', (e) => {
+                settings.fontSize = parseFloat(e.target.value);
+                applyFontSize();
+                updateFontSizeDisplay();
+                saveSettings();
+            });
+        }
+
+        function addTodo() {
+            const text = todoInput.value.trim();
+            if (!text) return;
+
+            const todoDate = document.getElementById('todoDate').value;
+            const todoTime = document.getElementById('todoTime').value;
+            const todoDescription = document.getElementById('todoDescription').value.trim();
+            const todoCategory = document.getElementById('todoCategory').value;
+            const customCategory = document.getElementById('customCategory').value.trim();
+            const todoPriority = document.getElementById('todoPriority').value;
+            
+            // Get final category
+            const finalCategory = todoCategory === 'custom' ? customCategory : todoCategory;
+
+            if (editingTodoId) {
+                // Update existing todo
+                const todo = todos.find(t => t.id === editingTodoId);
+                if (todo) {
+                    todo.text = text;
+                    todo.description = todoDescription;
+                    todo.category = finalCategory;
+                    todo.priority = todoPriority;
+                    todo.date = todoDate;
+                    todo.time = todoTime;
+                    todo.updatedAt = new Date().toISOString();
+                    
+                    // Clear existing alarm
+                    clearAlarm(editingTodoId);
+                    
+                    // Set new alarm if needed
+                    if (todoDate && todoTime) {
+                        setAlarm(todo);
+                    }
+                }
+                
+                // Reset edit mode
+                editingTodoId = null;
+                document.getElementById('addBtnText').textContent = 'Tambah 🌟';
+                document.getElementById('cancelEditBtn').classList.add('hidden');
+            } else {
+                // Create new todo
+                const todo = {
+                    id: Date.now(),
+                    text: text,
+                    description: todoDescription,
+                    category: finalCategory,
+                    priority: todoPriority,
+                    completed: false,
+                    createdAt: new Date().toISOString(),
+                    date: todoDate,
+                    time: todoTime
+                };
+
+                todos.unshift(todo);
+                
+                // Set alarm if scheduled
+                if (todoDate && todoTime) {
+                    setAlarm(todo);
+                }
+                
+                // Add bounce animation to new todo
+                setTimeout(() => {
+                    const newTodoElement = document.querySelector(`[data-id="${todo.id}"]`);
+                    if (newTodoElement) {
+                        newTodoElement.classList.add('bounce-in');
+                    }
+                }, 100);
+            }
+
+            // Clear form
+            clearForm();
+            
+            saveTodos();
+            renderTodos();
+            updateStats();
+
+            if (settings.addSound) {
+                playSound('add');
+                addBtn.classList.add('wiggle');
+                setTimeout(() => addBtn.classList.remove('wiggle'), 500);
+            }
+        }
+
+        function toggleTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (todo) {
+                todo.completed = !todo.completed;
+                
+                if (todo.completed) {
+                    clearAlarm(id);
+                    
+                    const todoElement = document.querySelector(`[data-id="${id}"]`);
+                    todoElement.classList.add('completed-task');
+                    
+                    if (settings.completionSound) {
+                        playSound('completion');
+                    }
+                    
+                    if (settings.motivationalMessages) {
+                        showMotivationalMessage();
+                    }
+                } else {
+                    // Re-set alarm if uncompleted and has schedule
+                    if (todo.date && todo.time) {
+                        setAlarm(todo);
+                    }
+                }
+                
+                saveTodos();
+                renderTodos();
+                updateStats();
+            }
+        }
+
+        function deleteTodo(id) {
+            clearAlarm(id);
+            todos = todos.filter(t => t.id !== id);
+            saveTodos();
+            renderTodos();
+            updateStats();
+        }
+        
+        function editTodo(id) {
+            const todo = todos.find(t => t.id === id);
+            if (!todo) return;
+            
+            editingTodoId = id;
+            todoInput.value = todo.text;
+            document.getElementById('todoDescription').value = todo.description || '';
+            document.getElementById('todoDate').value = todo.date || '';
+            document.getElementById('todoTime').value = todo.time || '';
+            document.getElementById('todoPriority').value = todo.priority || 'medium';
+            
+            // Handle category
+            const categorySelect = document.getElementById('todoCategory');
+            const customCategoryInput = document.getElementById('customCategory');
+            
+            const predefinedCategories = ['personal', 'work', 'study', 'health', 'family', 'hobby', 'shopping'];
+            if (predefinedCategories.includes(todo.category)) {
+                categorySelect.value = todo.category;
+                customCategoryInput.classList.add('hidden');
+                customCategoryInput.value = '';
+            } else {
+                categorySelect.value = 'custom';
+                customCategoryInput.classList.remove('hidden');
+                customCategoryInput.value = todo.category || '';
+            }
+            
+            document.getElementById('addBtnText').textContent = 'Update 📝';
+            document.getElementById('cancelEditBtn').classList.remove('hidden');
+            
+            todoInput.focus();
+        }
+        
+        function clearForm() {
+            todoInput.value = '';
+            document.getElementById('todoDescription').value = '';
+            document.getElementById('todoDate').value = '';
+            document.getElementById('todoTime').value = '';
+            document.getElementById('todoCategory').value = 'personal';
+            document.getElementById('customCategory').value = '';
+            document.getElementById('customCategory').classList.add('hidden');
+            document.getElementById('todoPriority').value = 'medium';
+        }
+        
+        function cancelEdit() {
+            editingTodoId = null;
+            clearForm();
+            document.getElementById('addBtnText').textContent = 'Tambah 🌟';
+            document.getElementById('cancelEditBtn').classList.add('hidden');
+        }
+        
+        function setAlarm(todo) {
+            if (!todo.date || !todo.time || !settings.alarmSound) return;
+            
+            const alarmDateTime = new Date(`${todo.date}T${todo.time}`);
+            const now = new Date();
+            const timeUntilAlarm = alarmDateTime.getTime() - now.getTime();
+            
+            if (timeUntilAlarm > 0) {
+                const timeoutId = setTimeout(() => {
+                    if (!todo.completed) {
+                        playSound('alarm');
+                        showAlarmNotification(todo);
+                    }
+                    alarmIntervals.delete(todo.id);
+                }, timeUntilAlarm);
+                
+                alarmIntervals.set(todo.id, timeoutId);
+            }
+        }
+        
+        function clearAlarm(todoId) {
+            if (alarmIntervals.has(todoId)) {
+                clearTimeout(alarmIntervals.get(todoId));
+                alarmIntervals.delete(todoId);
+            }
+        }
+        
+        function showAlarmNotification(todo) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-orange-400 text-white px-6 py-4 rounded-2xl font-semibold z-50 bounce-in max-w-sm text-center';
+            notification.innerHTML = `
+                <div class="text-2xl mb-2">⏰</div>
+                <div class="font-bold">Waktunya!</div>
+                <div class="text-sm">${todo.text}</div>
+                <button onclick="this.parentElement.remove()" class="mt-2 px-3 py-1 bg-white/20 rounded-lg text-xs hover:bg-white/30 transition-colors">
+                    Tutup
+                </button>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 10000);
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            const today = new Date();
+            const tomorrow = new Date(today);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            
+            if (date.toDateString() === today.toDateString()) {
+                return 'Hari ini';
+            } else if (date.toDateString() === tomorrow.toDateString()) {
+                return 'Besok';
+            } else {
+                return date.toLocaleDateString('id-ID', { 
+                    weekday: 'short', 
+                    day: 'numeric', 
+                    month: 'short' 
+                });
+            }
+        }
+        
+        function isOverdue(todo) {
+            if (!todo.date || !todo.time || todo.completed) return false;
+            
+            const taskDateTime = new Date(`${todo.date}T${todo.time}`);
+            const now = new Date();
+            
+            return taskDateTime < now;
+        }
+        
+        function getCategoryIcon(category) {
+            const categoryIcons = {
+                'personal': '👤',
+                'work': '💼',
+                'study': '📚',
+                'health': '🏃‍♀️',
+                'family': '👨‍👩‍👧‍👦',
+                'hobby': '🎨',
+                'shopping': '🛒'
+            };
+            return categoryIcons[category] || '📝';
+        }
+        
+        function getPriorityColor(priority) {
+            const priorityColors = {
+                'low': 'bg-green-100 text-green-700 border-green-200',
+                'medium': 'bg-yellow-100 text-yellow-700 border-yellow-200',
+                'high': 'bg-orange-100 text-orange-700 border-orange-200',
+                'urgent': 'bg-red-100 text-red-700 border-red-200'
+            };
+            return priorityColors[priority] || 'bg-gray-100 text-gray-700 border-gray-200';
+        }
+        
+        function getPriorityIcon(priority) {
+            const priorityIcons = {
+                'low': '🟢',
+                'medium': '🟡',
+                'high': '🟠',
+                'urgent': '🔴'
+            };
+            return priorityIcons[priority] || '🟡';
+        }
+        
+        function playSound(type) {
+            // Create audio context for sound generation
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            const volume = settings.volume / 100;
+            gainNode.gain.setValueAtTime(volume * 0.1, audioContext.currentTime);
+            
+            switch(type) {
+                case 'completion':
+                    // Happy completion sound
+                    oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+                    oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+                    oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+                    break;
+                case 'add':
+                    // Magical add sound
+                    oscillator.frequency.setValueAtTime(440, audioContext.currentTime); // A4
+                    oscillator.frequency.setValueAtTime(554.37, audioContext.currentTime + 0.1); // C#5
+                    break;
+                case 'alarm':
+                    // Alert alarm sound
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+                    oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.2);
+                    oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.4);
+                    break;
+            }
+            
+            oscillator.type = 'sine';
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+            
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+        }
+
+        function renderTodos() {
+            if (todos.length === 0) {
+                todoList.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            
+            todoList.innerHTML = todos.map(todo => {
+                const scheduleInfo = todo.date || todo.time ? 
+                    `<div class="text-xs text-gray-400 mt-1">
+                        ${todo.date ? `📅 ${formatDate(todo.date)}` : ''} 
+                        ${todo.time ? `⏰ ${todo.time}` : ''}
+                        ${isOverdue(todo) ? '<span class="text-red-500 font-semibold">⚠️ Terlambat!</span>' : ''}
+                    </div>` : '';
+                
+                const categoryDisplay = todo.category ? 
+                    `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200 mr-2">
+                        ${getCategoryIcon(todo.category)} ${todo.category}
+                    </span>` : '';
+                
+                const priorityDisplay = todo.priority ? 
+                    `<span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${getPriorityColor(todo.priority)} border">
+                        ${getPriorityIcon(todo.priority)} ${todo.priority}
+                    </span>` : '';
+                
+                const createdDate = new Date(todo.createdAt).toLocaleDateString('id-ID', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                return `
+                <div class="p-3 sm:p-4 bg-gray-50 rounded-2xl hover:bg-gray-100 transition-colors ${isOverdue(todo) ? 'border-l-4 border-red-400' : ''}" data-id="${todo.id}">
+                    <div class="flex items-start space-x-2 sm:space-x-3">
+                        <button 
+                            onclick="toggleTodo(${todo.id})"
+                            class="w-5 h-5 sm:w-6 sm:h-6 rounded-full border-2 ${todo.completed ? 'bg-green-400 border-green-400' : 'border-gray-300 hover:border-pink-400'} flex items-center justify-center transition-colors mt-1 flex-shrink-0"
+                        >
+                            ${todo.completed ? '<span class="text-white text-xs sm:text-sm">✓</span>' : ''}
+                        </button>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between">
+                                <div class="flex-1 mb-2 sm:mb-0">
+                                    <h4 class="${todo.completed ? 'line-through text-gray-500' : 'text-gray-700'} font-medium mb-1 text-sm sm:text-base">
+                                        ${todo.text}
+                                    </h4>
+                                    ${todo.description ? `<p class="text-xs sm:text-sm text-gray-500 mb-2">${todo.description}</p>` : ''}
+                                    <div class="flex flex-wrap items-center gap-1 sm:gap-2 mb-2">
+                                        ${categoryDisplay}
+                                        ${priorityDisplay}
+                                    </div>
+                                    ${scheduleInfo}
+                                    <div class="text-xs text-gray-400 mt-2">
+                                        📝 Dibuat: ${createdDate}
+                                        ${todo.updatedAt ? ` • ✏️ Diupdate: ${new Date(todo.updatedAt).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })}` : ''}
+                                    </div>
+                                </div>
+                                <div class="flex space-x-1 sm:ml-3 self-start">
+                                    <button 
+                                        onclick="editTodo(${todo.id})"
+                                        class="p-1.5 sm:p-2 text-blue-400 hover:text-blue-600 hover:bg-blue-50 rounded-full transition-colors"
+                                        title="Edit tugas"
+                                    >
+                                        <span class="text-sm sm:text-base">✏️</span>
+                                    </button>
+                                    <button 
+                                        onclick="deleteTodo(${todo.id})"
+                                        class="p-1.5 sm:p-2 text-red-400 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                        title="Hapus tugas"
+                                    >
+                                        <span class="text-sm sm:text-base">🗑️</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            }).join('');
+        }
+
+        function updateStats() {
+            const total = todos.length;
+            const completed = todos.filter(t => t.completed).length;
+            const pending = total - completed;
+            
+            document.getElementById('totalTasks').textContent = total;
+            document.getElementById('completedTasks').textContent = completed;
+            document.getElementById('pendingTasks').textContent = pending;
+        }
+
+        function showMotivationalMessage() {
+            const message = motivationalMessages[Math.floor(Math.random() * motivationalMessages.length)];
+            
+            // Create temporary message element
+            const messageEl = document.createElement('div');
+            messageEl.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-400 text-white px-6 py-3 rounded-2xl font-semibold z-50 bounce-in';
+            messageEl.textContent = message;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                messageEl.remove();
+            }, 3000);
+        }
+
+        function showSettings() {
+            todoPage.classList.add('hidden');
+            settingsPage.classList.remove('hidden');
+        }
+
+        function showTodos() {
+            settingsPage.classList.add('hidden');
+            todoPage.classList.remove('hidden');
+        }
+
+        function generateThemeButtons() {
+            const themeGrid = document.getElementById('themeGrid');
+            themeGrid.innerHTML = '';
+            
+            Object.entries(themes).forEach(([key, theme]) => {
+                if (key === 'custom') return; // Skip custom theme in grid
+                
+                const button = document.createElement('button');
+                button.className = `theme-btn p-3 sm:p-5 rounded-2xl sm:rounded-3xl border-2 sm:border-3 border-gray-200 hover:border-gray-400 transition-all transform hover:scale-105 hover:shadow-lg ${theme.animation}`;
+                button.dataset.theme = key;
+                button.style.background = `linear-gradient(135deg, ${theme.bgFrom}, ${theme.bgTo})`;
+                
+                button.innerHTML = `
+                    <div class="text-2xl sm:text-3xl mb-1 sm:mb-2">${theme.emoji}</div>
+                    <div class="font-bold text-sm sm:text-base" style="color: ${theme.primary}">${theme.name}</div>
+                    <div class="text-xs mt-1" style="color: ${theme.primaryLight}">${theme.description}</div>
+                `;
+                
+                button.addEventListener('click', () => changeTheme(key));
+                themeGrid.appendChild(button);
+            });
+        }
+        
+        function changeTheme(theme) {
+            settings.theme = theme;
+            saveSettings();
+            
+            // Update active theme button
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('ring-4', 'ring-offset-2');
+                btn.style.boxShadow = '';
+            });
+            
+            const activeBtn = document.querySelector(`[data-theme="${theme}"]`);
+            if (activeBtn) {
+                activeBtn.classList.add('ring-4', 'ring-offset-2');
+                activeBtn.style.boxShadow = `0 0 0 4px ${themes[theme].primary}40`;
+                
+                // Add wiggle animation to show change
+                activeBtn.classList.add('wiggle');
+                setTimeout(() => activeBtn.classList.remove('wiggle'), 500);
+            }
+            
+            // Apply theme colors and animations
+            applyTheme(theme);
+            applyThemeAnimations(theme);
+        }
+        
+        function previewCustomTheme() {
+            const customTheme = {
+                primary: document.getElementById('customPrimary').value,
+                secondary: document.getElementById('customSecondary').value,
+                bgFrom: document.getElementById('customBgFrom').value,
+                bgTo: document.getElementById('customBgTo').value
+            };
+            
+            applyCustomTheme(customTheme);
+        }
+        
+        function saveCustomTheme() {
+            const customTheme = {
+                primary: document.getElementById('customPrimary').value,
+                secondary: document.getElementById('customSecondary').value,
+                bgFrom: document.getElementById('customBgFrom').value,
+                bgTo: document.getElementById('customBgTo').value
+            };
+            
+            settings.customTheme = customTheme;
+            settings.theme = 'custom';
+            
+            // Update custom theme in themes object
+            themes.custom.primary = customTheme.primary;
+            themes.custom.secondary = customTheme.secondary;
+            themes.custom.bgFrom = customTheme.bgFrom;
+            themes.custom.bgTo = customTheme.bgTo;
+            themes.custom.primaryLight = customTheme.primary + '80';
+            themes.custom.primaryDark = customTheme.primary;
+            themes.custom.bgVia = customTheme.bgFrom;
+            themes.custom.shadow = customTheme.primary + '40';
+            
+            saveSettings();
+            applyCustomTheme(customTheme);
+            
+            // Show success message
+            const message = document.createElement('div');
+            message.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-green-400 text-white px-6 py-3 rounded-2xl font-semibold z-50 bounce-in';
+            message.textContent = '🎨 Tema custom berhasil disimpan!';
+            document.body.appendChild(message);
+            
+            setTimeout(() => message.remove(), 3000);
+        }
+        
+        function applyCustomTheme(customTheme) {
+            const root = document.documentElement;
+            
+            root.style.setProperty('--primary-color', customTheme.primary);
+            root.style.setProperty('--primary-light', customTheme.primary + '80');
+            root.style.setProperty('--primary-dark', customTheme.primary);
+            root.style.setProperty('--secondary-color', customTheme.secondary);
+            root.style.setProperty('--bg-gradient-from', customTheme.bgFrom);
+            root.style.setProperty('--bg-gradient-via', customTheme.bgFrom);
+            root.style.setProperty('--bg-gradient-to', customTheme.bgTo);
+            root.style.setProperty('--shadow-color', customTheme.primary + '40');
+        }
+
+        function applyTheme(themeName) {
+            if (themeName === 'custom') {
+                applyCustomTheme(settings.customTheme);
+                return;
+            }
+            
+            const theme = themes[themeName];
+            const root = document.documentElement;
+            
+            root.style.setProperty('--primary-color', theme.primary);
+            root.style.setProperty('--primary-light', theme.primaryLight);
+            root.style.setProperty('--primary-dark', theme.primaryDark);
+            root.style.setProperty('--secondary-color', theme.secondary);
+            root.style.setProperty('--bg-gradient-from', theme.bgFrom);
+            root.style.setProperty('--bg-gradient-via', theme.bgVia);
+            root.style.setProperty('--bg-gradient-to', theme.bgTo);
+            root.style.setProperty('--shadow-color', theme.shadow);
+        }
+        
+        function applyThemeAnimations(themeName) {
+            // Remove all theme animation classes
+            document.body.classList.remove('sakura-petals', 'ocean-waves', 'forest-leaves', 'sunset-glow', 'space-stars', 'lavender-field');
+            
+            // Add current theme animation
+            if (themes[themeName] && themes[themeName].animation) {
+                document.body.classList.add(themes[themeName].animation);
+            }
+        }
+
+        function applyBrightness() {
+            document.documentElement.style.setProperty('--brightness', settings.brightness);
+        }
+
+        function applyFontSize() {
+            document.body.style.fontSize = `${settings.fontSize}rem`;
+        }
+
+        function updateBrightnessDisplay() {
+            const percentage = Math.round(settings.brightness * 100);
+            document.getElementById('brightnessValue').textContent = `${percentage}%`;
+        }
+
+        function updateFontSizeDisplay() {
+            const sizeNames = {
+                0.8: 'Kecil',
+                0.9: 'Agak Kecil', 
+                1.0: 'Normal',
+                1.1: 'Agak Besar',
+                1.2: 'Besar',
+                1.3: 'Sangat Besar',
+                1.4: 'Extra Besar'
+            };
+            const sizeName = sizeNames[settings.fontSize] || 'Normal';
+            document.getElementById('fontSizeValue').textContent = sizeName;
+        }
+        
+        function updateVolumeDisplay() {
+            document.getElementById('volumeValue').textContent = `${settings.volume}%`;
+        }
+
+        function exportData() {
+            try {
+                // Prepare comprehensive data for export
+                const exportData = {
+                    todos: todos,
+                    settings: settings,
+                    exportDate: new Date().toISOString(),
+                    version: '2.0',
+                    appName: 'Todo List Imut',
+                    totalTasks: todos.length,
+                    completedTasks: todos.filter(t => t.completed).length,
+                    categories: [...new Set(todos.map(t => t.category).filter(Boolean))],
+                    exportInfo: {
+                        userAgent: navigator.userAgent,
+                        timestamp: Date.now(),
+                        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+                    }
+                };
+                
+                // Create and download file
+                const jsonString = JSON.stringify(exportData, null, 2);
+                const blob = new Blob([jsonString], { 
+                    type: 'application/json;charset=utf-8' 
+                });
+                
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                
+                // Generate filename with date and time
+                const now = new Date();
+                const dateStr = now.toISOString().split('T')[0];
+                const timeStr = now.toTimeString().split(' ')[0].replace(/:/g, '-');
+                
+                link.href = url;
+                link.download = `todo-imut-backup-${dateStr}-${timeStr}.json`;
+                link.style.display = 'none';
+                
+                // Add to DOM, click, and remove
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                // Clean up URL object
+                setTimeout(() => URL.revokeObjectURL(url), 100);
+                
+                // Show success message with file info
+                showMessage(`📤 Export berhasil!\n\nFile: todo-imut-backup-${dateStr}-${timeStr}.json\nTotal tugas: ${exportData.totalTasks}\nUkuran: ${(jsonString.length / 1024).toFixed(1)} KB`, 'success');
+                
+                // Add visual feedback to export button
+                const exportBtn = document.getElementById('exportBtn');
+                exportBtn.classList.add('wiggle');
+                setTimeout(() => exportBtn.classList.remove('wiggle'), 500);
+                
+            } catch (error) {
+                console.error('Export error:', error);
+                showMessage('❌ Gagal export data! Terjadi kesalahan sistem 😢', 'error');
+            }
+        }
+        
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // Validate file type - accept both .json and .txt files
+            const fileName = file.name.toLowerCase();
+            if (!fileName.endsWith('.json') && !fileName.endsWith('.txt')) {
+                showMessage('❌ File harus berformat .json atau .txt!', 'error');
+                event.target.value = '';
+                return;
+            }
+            
+            // Validate file size (max 50MB for better compatibility)
+            if (file.size > 50 * 1024 * 1024) {
+                showMessage('❌ File terlalu besar! Maksimal 50MB', 'error');
+                event.target.value = '';
+                return;
+            }
+            
+            // Show loading immediately
+            const importBtn = document.getElementById('importBtn');
+            const originalText = importBtn.innerHTML;
+            importBtn.innerHTML = '<span class="text-2xl mr-2">📖</span>Membaca File...<div class="text-sm font-normal mt-1">Mohon tunggu...</div>';
+            importBtn.disabled = true;
+            
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                try {
+                    let importedData;
+                    const fileContent = e.target.result;
+                    
+                    // Try to parse as JSON first
+                    try {
+                        importedData = JSON.parse(fileContent);
+                    } catch (jsonError) {
+                        // If JSON parsing fails, try to parse as simple text format
+                        try {
+                            importedData = parseTextFormat(fileContent);
+                        } catch (textError) {
+                            throw new Error('File tidak dapat dibaca sebagai JSON atau format teks yang valid');
+                        }
+                    }
+                    
+                    // Comprehensive validation
+                    if (!importedData || typeof importedData !== 'object') {
+                        throw new Error('File bukan format yang valid');
+                    }
+                    
+                    // Handle different data structures
+                    let todosToImport = [];
+                    let settingsToImport = null;
+                    
+                    if (importedData.todos && Array.isArray(importedData.todos)) {
+                        // Standard Todo Imut format
+                        todosToImport = importedData.todos;
+                        settingsToImport = importedData.settings;
+                    } else if (Array.isArray(importedData)) {
+                        // Simple array of todos
+                        todosToImport = importedData;
+                    } else if (importedData.tasks && Array.isArray(importedData.tasks)) {
+                        // Alternative format with 'tasks' key
+                        todosToImport = importedData.tasks.map(task => ({
+                            id: task.id || Date.now() + Math.random(),
+                            text: task.text || task.title || task.name || 'Tugas tanpa nama',
+                            description: task.description || task.desc || '',
+                            completed: task.completed || task.done || false,
+                            category: task.category || 'personal',
+                            priority: task.priority || 'medium',
+                            date: task.date || task.dueDate || '',
+                            time: task.time || task.dueTime || '',
+                            createdAt: task.createdAt || task.created || new Date().toISOString()
+                        }));
+                    } else {
+                        throw new Error('Format data tidak dikenali. File harus berisi array todos atau object dengan key todos/tasks');
+                    }
+                    
+                    // Validate and clean todos
+                    const validTodos = todosToImport.filter(todo => {
+                        if (!todo || typeof todo !== 'object') return false;
+                        if (!todo.text && !todo.title && !todo.name) return false;
+                        return true;
+                    }).map(todo => ({
+                        id: todo.id || Date.now() + Math.random(),
+                        text: todo.text || todo.title || todo.name || 'Tugas tanpa nama',
+                        description: todo.description || todo.desc || '',
+                        completed: Boolean(todo.completed || todo.done),
+                        category: todo.category || 'personal',
+                        priority: todo.priority || 'medium',
+                        date: todo.date || todo.dueDate || '',
+                        time: todo.time || todo.dueTime || '',
+                        createdAt: todo.createdAt || todo.created || new Date().toISOString(),
+                        importedAt: new Date().toISOString()
+                    }));
+                    
+                    if (validTodos.length === 0) {
+                        throw new Error('Tidak ada tugas valid yang ditemukan dalam file');
+                    }
+                    
+                    // Show detailed confirmation dialog
+                    const exportDate = importedData.exportDate ? 
+                        new Date(importedData.exportDate).toLocaleString('id-ID') : 
+                        'Tidak diketahui';
+                    
+                    const categories = [...new Set(validTodos.map(t => t.category).filter(Boolean))];
+                    
+                    const confirmMessage = `🔄 KONFIRMASI IMPORT DATA\n\n` +
+                        `📁 File: ${file.name}\n` +
+                        `📅 Tanggal Export: ${exportDate}\n` +
+                        `📊 Total Tugas Valid: ${validTodos.length}\n` +
+                        `✅ Selesai: ${validTodos.filter(t => t.completed).length}\n` +
+                        `⏳ Pending: ${validTodos.filter(t => !t.completed).length}\n` +
+                        `🏷️ Kategori: ${categories.length} (${categories.slice(0, 3).join(', ')}${categories.length > 3 ? '...' : ''})\n\n` +
+                        `⚠️ PERINGATAN: Data saat ini akan DIGANTI TOTAL!\n` +
+                        `Data lama: ${todos.length} tugas akan hilang!\n\n` +
+                        `Lanjutkan import?`;
+                    
+                    // Restore button first
+                    importBtn.innerHTML = originalText;
+                    importBtn.disabled = false;
+                    
+                    if (confirm(confirmMessage)) {
+                        // Show processing state
+                        importBtn.innerHTML = '<span class="text-2xl mr-2">⚙️</span>Memproses...<div class="text-sm font-normal mt-1">Mengimpor data...</div>';
+                        importBtn.disabled = true;
+                        
+                        setTimeout(() => {
+                            try {
+                                // Clear existing alarms
+                                alarmIntervals.forEach((timeoutId) => {
+                                    clearTimeout(timeoutId);
+                                });
+                                alarmIntervals.clear();
+                                
+                                // Backup current data before import
+                                const backupData = {
+                                    todos: [...todos],
+                                    settings: {...settings},
+                                    backupDate: new Date().toISOString()
+                                };
+                                localStorage.setItem('emergency-backup', JSON.stringify(backupData));
+                                
+                                // Import todos
+                                todos = validTodos;
+                                
+                                // Import settings if available
+                                if (settingsToImport && typeof settingsToImport === 'object') {
+                                    settings = {
+                                        ...settings, // Keep current settings as base
+                                        ...settingsToImport, // Override with imported settings
+                                        // Always preserve some critical settings for safety
+                                        volume: Math.min(Math.max(settingsToImport.volume || settings.volume, 0), 100),
+                                        brightness: Math.min(Math.max(settingsToImport.brightness || settings.brightness, 0.3), 1.2)
+                                    };
+                                }
+                                
+                                // Save everything to localStorage
+                                saveTodos();
+                                saveSettings();
+                                
+                                // Re-render and update everything
+                                renderTodos();
+                                updateStats();
+                                loadSettings();
+                                
+                                // Set up alarms for imported todos
+                                if (settings.alarmSound) {
+                                    todos.forEach(todo => {
+                                        if (todo.date && todo.time && !todo.completed) {
+                                            setAlarm(todo);
+                                        }
+                                    });
+                                }
+                                
+                                // Restore button state
+                                importBtn.innerHTML = originalText;
+                                importBtn.disabled = false;
+                                
+                                // Show success message
+                                showMessage(`📥 Import berhasil!\n\n✨ ${validTodos.length} tugas berhasil diimport\n🔄 Semua data sudah dipulihkan\n💾 Backup otomatis tersimpan\n🎉 Selamat datang kembali!`, 'success');
+                                
+                                // Add celebration effect
+                                importBtn.classList.add('wiggle');
+                                setTimeout(() => importBtn.classList.remove('wiggle'), 500);
+                                
+                                // Auto-scroll to top to show imported todos
+                                window.scrollTo({ top: 0, behavior: 'smooth' });
+                                
+                            } catch (importError) {
+                                console.error('Import processing error:', importError);
+                                
+                                // Restore button state
+                                importBtn.innerHTML = originalText;
+                                importBtn.disabled = false;
+                                
+                                showMessage(`❌ Gagal memproses import!\n\n🔍 Error: ${importError.message}\n💡 Coba periksa format file`, 'error');
+                            }
+                        }, 1500); // Longer delay for better UX
+                    }
+                    
+                } catch (parseError) {
+                    console.error('Import parse error:', parseError);
+                    
+                    // Restore button state
+                    importBtn.innerHTML = originalText;
+                    importBtn.disabled = false;
+                    
+                    let errorMessage = '❌ Gagal membaca file!\n\n';
+                    
+                    if (parseError.message.includes('JSON')) {
+                        errorMessage += '📄 File bukan format JSON yang valid\n💡 Pastikan file adalah export dari Todo Imut';
+                    } else {
+                        errorMessage += `🔍 ${parseError.message}\n💡 Coba export ulang dari aplikasi asli`;
+                    }
+                    
+                    showMessage(errorMessage, 'error');
+                }
+            };
+            
+            reader.onerror = function() {
+                // Restore button state
+                importBtn.innerHTML = originalText;
+                importBtn.disabled = false;
+                
+                showMessage('❌ Gagal membaca file!\n\n📁 File mungkin rusak atau tidak dapat diakses\n💡 Coba pilih file lain', 'error');
+            };
+            
+            // Start reading file with proper encoding
+            reader.readAsText(file, 'UTF-8');
+            
+            // Reset file input
+            event.target.value = '';
+        }
+        
+        // Helper function to parse simple text format
+        function parseTextFormat(content) {
+            const lines = content.split('\n').filter(line => line.trim());
+            const todos = [];
+            
+            for (let line of lines) {
+                line = line.trim();
+                if (!line || line.startsWith('#') || line.startsWith('//')) continue;
+                
+                // Try to parse different text formats
+                let todo = {
+                    id: Date.now() + Math.random(),
+                    completed: false,
+                    category: 'personal',
+                    priority: 'medium',
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Check if line starts with checkbox markers
+                if (line.startsWith('- [ ]') || line.startsWith('- [x]') || line.startsWith('- [X]')) {
+                    todo.completed = line.includes('[x]') || line.includes('[X]');
+                    todo.text = line.substring(5).trim();
+                } else if (line.startsWith('☐') || line.startsWith('☑') || line.startsWith('✓')) {
+                    todo.completed = line.startsWith('☑') || line.startsWith('✓');
+                    todo.text = line.substring(1).trim();
+                } else {
+                    // Simple text line
+                    todo.text = line;
+                }
+                
+                if (todo.text && todo.text.length > 0) {
+                    todos.push(todo);
+                }
+            }
+            
+            return { todos: todos };
+        }
+        
+        function showMessage(message, type = 'info') {
+            const messageEl = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-400' : type === 'error' ? 'bg-red-400' : 'bg-blue-400';
+            
+            messageEl.className = `fixed top-20 left-1/2 transform -translate-x-1/2 ${bgColor} text-white px-6 py-4 rounded-2xl font-semibold z-50 bounce-in max-w-sm text-center`;
+            messageEl.innerHTML = `
+                <div class="mb-2">${message}</div>
+                <button onclick="this.parentElement.remove()" class="mt-2 px-3 py-1 bg-white/20 rounded-lg text-xs hover:bg-white/30 transition-colors">
+                    Tutup
+                </button>
+            `;
+            
+            document.body.appendChild(messageEl);
+            
+            setTimeout(() => {
+                if (messageEl.parentElement) {
+                    messageEl.remove();
+                }
+            }, 5000);
+        }
+
+        function clearAllData() {
+            // Create detailed confirmation dialog
+            const currentStats = {
+                total: todos.length,
+                completed: todos.filter(t => t.completed).length,
+                pending: todos.filter(t => !t.completed).length,
+                categories: [...new Set(todos.map(t => t.category).filter(Boolean))].length
+            };
+            
+            const confirmMessage = `🗑️ KONFIRMASI HAPUS SEMUA DATA\n\n` +
+                `📊 Data yang akan dihapus:\n` +
+                `• Total tugas: ${currentStats.total}\n` +
+                `• Tugas selesai: ${currentStats.completed}\n` +
+                `• Tugas pending: ${currentStats.pending}\n` +
+                `• Kategori: ${currentStats.categories}\n\n` +
+                `⚠️ PERINGATAN KERAS:\n` +
+                `• Semua tugas akan HILANG PERMANEN!\n` +
+                `• Pengaturan akan direset ke default!\n` +
+                `• Tidak ada cara untuk mengembalikan!\n\n` +
+                `💡 Tip: Export data dulu sebelum hapus!\n\n` +
+                `Yakin mau hapus SEMUA data? 😢`;
+            
+            if (confirm(confirmMessage)) {
+                // Double confirmation for safety
+                const finalConfirm = confirm(`🚨 KONFIRMASI TERAKHIR!\n\nIni adalah kesempatan terakhir!\n\nKetik "HAPUS" di prompt berikutnya untuk melanjutkan, atau Cancel untuk membatalkan.`);
+                
+                if (finalConfirm) {
+                    const userInput = prompt('Ketik "HAPUS" (huruf besar semua) untuk konfirmasi penghapusan:');
+                    
+                    if (userInput === 'HAPUS') {
+                        try {
+                            // Show loading state
+                            const clearBtn = document.getElementById('clearBtn');
+                            const originalText = clearBtn.innerHTML;
+                            clearBtn.innerHTML = '<span class="text-2xl mr-2">🗑️</span>Menghapus...<div class="text-sm font-normal mt-1">Mohon tunggu...</div>';
+                            clearBtn.disabled = true;
+                            
+                            setTimeout(() => {
+                                // Create emergency backup before clearing
+                                const emergencyBackup = {
+                                    todos: [...todos],
+                                    settings: {...settings},
+                                    clearedAt: new Date().toISOString(),
+                                    stats: currentStats
+                                };
+                                localStorage.setItem('last-cleared-backup', JSON.stringify(emergencyBackup));
+                                
+                                // Clear all alarms
+                                alarmIntervals.forEach((timeoutId) => {
+                                    clearTimeout(timeoutId);
+                                });
+                                alarmIntervals.clear();
+                                
+                                // Reset todos
+                                todos = [];
+                                
+                                // Reset settings to default
+                                settings = {
+                                    theme: 'sakura',
+                                    completionSound: true,
+                                    addSound: true,
+                                    motivationalMessages: true,
+                                    brightness: 1,
+                                    fontSize: 1,
+                                    alarmSound: true,
+                                    volume: 50,
+                                    customTheme: {
+                                        primary: '#ec4899',
+                                        secondary: '#a855f7',
+                                        bgFrom: '#fce7f3',
+                                        bgTo: '#e0e7ff'
+                                    }
+                                };
+                                
+                                // Clear localStorage
+                                localStorage.removeItem('todos');
+                                localStorage.removeItem('settings');
+                                
+                                // Re-render everything
+                                renderTodos();
+                                updateStats();
+                                loadSettings();
+                                
+                                // Restore button state
+                                clearBtn.innerHTML = originalText;
+                                clearBtn.disabled = false;
+                                
+                                // Show success message with recovery info
+                                showMessage(`🧹 Semua data berhasil dihapus!\n\n✨ Aplikasi sudah direset ke kondisi awal\n💾 Backup darurat tersimpan untuk recovery\n🌸 Selamat memulai yang baru!`, 'success');
+                                
+                                // Add celebration effect
+                                clearBtn.classList.add('wiggle');
+                                setTimeout(() => clearBtn.classList.remove('wiggle'), 500);
+                                
+                                // Show recovery tip after a delay
+                                setTimeout(() => {
+                                    showMessage(`💡 Tips Recovery:\n\nJika kamu menyesal menghapus data, buka Developer Console (F12) dan ketik:\nlocalStorage.getItem('last-cleared-backup')\n\nUntuk melihat backup terakhir! 🔧`, 'info');
+                                }, 5000);
+                                
+                            }, 1500); // Delay for better UX
+                            
+                        } catch (error) {
+                            console.error('Clear data error:', error);
+                            showMessage('❌ Gagal menghapus data! Terjadi kesalahan sistem 😢', 'error');
+                            
+                            // Restore button if error
+                            const clearBtn = document.getElementById('clearBtn');
+                            clearBtn.innerHTML = originalText;
+                            clearBtn.disabled = false;
+                        }
+                    } else {
+                        showMessage('✅ Penghapusan dibatalkan! Data kamu aman 😊', 'info');
+                    }
+                } else {
+                    showMessage('✅ Penghapusan dibatalkan! Data kamu aman 😊', 'info');
+                }
+            } else {
+                showMessage('✅ Penghapusan dibatalkan! Data kamu aman 😊', 'info');
+            }
+        }
+
+        function saveTodos() {
+            localStorage.setItem('todos', JSON.stringify(todos));
+        }
+
+        function saveSettings() {
+            localStorage.setItem('settings', JSON.stringify(settings));
+        }
+
+        function loadSettings() {
+            // Load checkboxes
+            document.getElementById('completionSound').checked = settings.completionSound;
+            document.getElementById('addSound').checked = settings.addSound;
+            document.getElementById('alarmSound').checked = settings.alarmSound;
+            document.getElementById('motivationalMessages').checked = settings.motivationalMessages;
+            
+            // Load sliders
+            document.getElementById('brightnessSlider').value = settings.brightness;
+            document.getElementById('fontSizeSlider').value = settings.fontSize;
+            document.getElementById('volumeSlider').value = settings.volume;
+            
+            // Load custom theme colors
+            if (settings.customTheme) {
+                document.getElementById('customPrimary').value = settings.customTheme.primary;
+                document.getElementById('customSecondary').value = settings.customTheme.secondary;
+                document.getElementById('customBgFrom').value = settings.customTheme.bgFrom;
+                document.getElementById('customBgTo').value = settings.customTheme.bgTo;
+                
+                // Update custom theme in themes object
+                themes.custom.primary = settings.customTheme.primary;
+                themes.custom.secondary = settings.customTheme.secondary;
+                themes.custom.bgFrom = settings.customTheme.bgFrom;
+                themes.custom.bgTo = settings.customTheme.bgTo;
+                themes.custom.primaryLight = settings.customTheme.primary + '80';
+                themes.custom.primaryDark = settings.customTheme.primary;
+                themes.custom.bgVia = settings.customTheme.bgFrom;
+                themes.custom.shadow = settings.customTheme.primary + '40';
+            }
+            
+            // Apply current settings
+            applyTheme(settings.theme);
+            applyThemeAnimations(settings.theme);
+            applyBrightness();
+            applyFontSize();
+            updateBrightnessDisplay();
+            updateFontSizeDisplay();
+            updateVolumeDisplay();
+            
+            // Load theme button state
+            const activeBtn = document.querySelector(`[data-theme="${settings.theme}"]`);
+            if (activeBtn && themes[settings.theme]) {
+                activeBtn.classList.add('ring-4', 'ring-offset-2');
+                activeBtn.style.boxShadow = `0 0 0 4px ${themes[settings.theme].primary}40`;
+            }
+            
+            // Set up existing alarms
+            if (settings.alarmSound) {
+                todos.forEach(todo => {
+                    if (todo.date && todo.time && !todo.completed) {
+                        setAlarm(todo);
+                    }
+                });
+            }
+        }
+
+        // Initialize the app
+        init();
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'96dcce68053b9c74',t:'MTc1NDk2ODUwNS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
